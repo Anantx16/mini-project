@@ -1,0 +1,67 @@
+@startuml
+title University Library Management System - Class Diagram
+
+class Book {
+  - int id
+  - string title
+  - string author
+  - int totalCopies
+  - int availableCopies
+  + getId() : int
+  + issueCopy() : void
+  + returnCopy() : void
+  + display() : void
+  + serialize() : string
+}
+
+abstract class LibraryUser {
+  # int id
+  # string name
+  + getId() : int
+  + getName() : string
+  {abstract} + borrowingLimit() : int
+  {abstract} + role() : string
+  {abstract} + serialize() : string
+  + display() : void
+}
+
+class StudentMember {
+  + borrowingLimit() : int
+  + role() : string
+  + serialize() : string
+}
+
+class FacultyMember {
+  + borrowingLimit() : int
+  + role() : string
+  + serialize() : string
+}
+
+class Loan {
+  + int bookId
+  + int userId
+  + serialize() : string
+}
+
+class Library {
+  - vector<Book> books
+  - map<int, unique_ptr<LibraryUser>> users
+  - vector<Loan> loans
+  + addBook() : void
+  + registerUser() : void
+  + listBooks() : void
+  + searchBook() : void
+  + issueBook() : void
+  + returnBook() : void
+  + saveAll() : void
+  + loadAll() : void
+}
+
+LibraryUser <|-- StudentMember
+LibraryUser <|-- FacultyMember
+Library "1" o-- "*" Book
+Library "1" o-- "*" LibraryUser
+Library "1" o-- "*" Loan
+Loan "*" --> "1" Book
+Loan "*" --> "1" LibraryUser
+@enduml
